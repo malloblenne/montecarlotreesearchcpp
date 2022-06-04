@@ -1,0 +1,11 @@
+name: CD-CI
+on: [push]
+jobs:
+  compile:
+    name: Compile CPP
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: compile
+        run: g++ -g main.cpp -o main.out
