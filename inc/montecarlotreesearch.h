@@ -6,8 +6,7 @@
 #include "expansionpolicy.h"
 #include "backpropagationpolicy.h"
 #include "simulationpolicy.h"
-
-#include <chrono>
+#include "resourcecriteria.h"
 
 namespace MonteCarloTreeSearch
 {
@@ -20,7 +19,7 @@ namespace MonteCarloTreeSearch
                 std::unique_ptr<ExpansionPolicy> expansion;
                 std::unique_ptr<BackPropagationPolicy> backup;
                 std::unique_ptr<SimulationPolicy> simulation;
-                std::chrono::duration<int> duration;
+                std::unique_ptr<ResourceCriteria> resourcecriteria;
             };
 
             MonteCarloTreeSearch(MonteCarloTreeSearchInitialization init);
@@ -31,7 +30,7 @@ namespace MonteCarloTreeSearch
             std::unique_ptr<ExpansionPolicy> expansion;
             std::unique_ptr<BackPropagationPolicy> backup;
             std::unique_ptr<SimulationPolicy> simulation;
-            std::chrono::duration<int> duration;
+            std::unique_ptr<ResourceCriteria> resourcecriteria;
             
             std::shared_ptr<TreeSearchNode> root;
     };

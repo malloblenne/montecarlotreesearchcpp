@@ -2,14 +2,13 @@
 #include <thread>
  
 using namespace MonteCarloTreeSearch;
-using namespace std::chrono_literals;
 
 MonteCarloTreeSearch::MonteCarloTreeSearch(MonteCarloTreeSearch::MonteCarloTreeSearch::MonteCarloTreeSearchInitialization init):
                                            selection(std::move(init.selection)),
                                            expansion(std::move(init.expansion)),
                                            backup(std::move(init.backup)),
                                            simulation(std::move(init.simulation)),
-                                           duration(init.duration)
+                                           resoucecriteria(std::move(init.resourcecriteria))
                                            {
 
                                            }
@@ -17,14 +16,13 @@ MonteCarloTreeSearch::MonteCarloTreeSearch(MonteCarloTreeSearch::MonteCarloTreeS
 
 void MonteCarloTreeSearch::init(std::shared_ptr<GameState> state)
 {
-
+    resourcecriteria->init();
 }
 
 std::unique_ptr<Action> MonteCarloTreeSearch::search(std::shared_ptr<GameState> state)
 {
-    const auto start = chrono::steady_clock::now();
-    const auto still_time = [start, this]() { return (chrono::steady_clock::now() - start) < duration;};
-    while(still_time)
+
+    while(!resourcecriteria->expired())
     {
         std::this_thread::sleep_for(2000ms);
     }
