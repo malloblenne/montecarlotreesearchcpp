@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-namespace MonteCarloTreeSearch
+namespace mctsearch
 {
     enum class WinningState
     {

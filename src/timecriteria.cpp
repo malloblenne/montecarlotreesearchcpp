@@ -1,8 +1,8 @@
-#include "../inc/timecriteria.h"
+#include "timecriteria.h"
 
 #include <chrono>
  
-using namespace MonteCarloTreeSearch;
+using namespace mctsearch;
 using namespace std::chrono_literals;
 
 

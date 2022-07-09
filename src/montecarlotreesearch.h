@@ -1,5 +1,6 @@
 #pragma once
 
+#include "action.h"
 #include "treesearch.h"
 #include "treesearchnode.h"
 #include "selectionpolicy.h"
@@ -8,7 +9,7 @@
 #include "simulationpolicy.h"
 #include "resourcecriteria.h"
 
-namespace MonteCarloTreeSearch
+namespace mctsearch
 {
     class MonteCarloTreeSearch: public TreeSearch
     {

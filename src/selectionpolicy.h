@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace MonteCarloTreeSearch
+namespace mctsearch
 {
     class SelectionPolicy
     {
