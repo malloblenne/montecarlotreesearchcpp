@@ -1,7 +1,7 @@
-#include "../inc/treesearchnode.h"
+#include "treesearchnode.h"
 #include <stdexcept>
 
-using namespace MonteCarloTreeSearch;
+using namespace mctsearch;
 
 TreeSearchNode::TreeSearchNode(std::unique_ptr<GameState> state,  std::weak_ptr<TreeSearchNode> parent):
 state(std::move(state)),

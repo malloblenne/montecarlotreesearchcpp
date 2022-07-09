@@ -1,14 +1,17 @@
-#include "../inc/montecarlotreesearch.h"
+#include "montecarlotreesearch.h"
 #include <thread>
+#include <chrono>
  
-using namespace MonteCarloTreeSearch;
+using namespace mctsearch;
+using namespace std::chrono_literals;
 
-MonteCarloTreeSearch::MonteCarloTreeSearch(MonteCarloTreeSearch::MonteCarloTreeSearch::MonteCarloTreeSearchInitialization init):
+
+MonteCarloTreeSearch::MonteCarloTreeSearch(MonteCarloTreeSearch::MonteCarloTreeSearchInitialization init):
                                            selection(std::move(init.selection)),
                                            expansion(std::move(init.expansion)),
                                            backup(std::move(init.backup)),
                                            simulation(std::move(init.simulation)),
-                                           resoucecriteria(std::move(init.resourcecriteria))
+                                           resourcecriteria(std::move(init.resourcecriteria))
                                            {
 
                                            }
@@ -26,5 +29,5 @@ std::unique_ptr<Action> MonteCarloTreeSearch::search(std::shared_ptr<GameState> 
     {
         std::this_thread::sleep_for(2000ms);
     }
-    return std::unique_ptr<Action>;
+    return std::unique_ptr<Action>();
 }

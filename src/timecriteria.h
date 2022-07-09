@@ -7,7 +7,7 @@
 
 
 
-namespace MonteCarloTreeSearch
+namespace mctsearch
 {
     class TimeCriteria: public ResourceCriteria
     {
