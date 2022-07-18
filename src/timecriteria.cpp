@@ -7,7 +7,7 @@ using namespace std::chrono_literals;
 
 
 
-TimeCriteria::TimeCriteria(std::chrono::duration<int> duration): duration(duration)
+TimeCriteria::TimeCriteria(std::chrono::duration<int> duration): duration{duration}
 {
 
 }
