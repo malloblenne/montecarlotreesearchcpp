@@ -8,15 +8,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_subdirectory(src)
 list(APPEND EXTRA_LIBS MonteCarloTreeSearchCPP)
 
-include(CTest)
-enable_testing()
-
-#add_library(MonteCarloTreeSearchCPP MonteCarloTreeSearchCPP.cpp)
 
 add_executable(Main main.cpp)
 target_link_libraries(Main PUBLIC ${EXTRA_LIBS})
 
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack)
+include(CTest)
+enable_testing()
+#set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+#set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+#include(CPack)
 add_subdirectory(test)

@@ -4,8 +4,8 @@
 using namespace mctsearch;
 
 TreeSearchNode::TreeSearchNode(std::unique_ptr<GameState> state,  std::weak_ptr<TreeSearchNode> parent):
-state(std::move(state)),
-parent(parent)
+state{std::move(state)},
+parent{parent}
 {
     children.resize(state->number_moves());
 }

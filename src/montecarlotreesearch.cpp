@@ -7,11 +7,11 @@ using namespace std::chrono_literals;
 
 
 MonteCarloTreeSearch::MonteCarloTreeSearch(MonteCarloTreeSearch::MonteCarloTreeSearchInitialization init):
-                                           selection(std::move(init.selection)),
-                                           expansion(std::move(init.expansion)),
-                                           backup(std::move(init.backup)),
-                                           simulation(std::move(init.simulation)),
-                                           resourcecriteria(std::move(init.resourcecriteria))
+                                           selection{std::move(init.selection)},
+                                           expansion{std::move(init.expansion)},
+                                           backup{std::move(init.backup)},
+                                           simulation{std::move(init.simulation)},
+                                           resourcecriteria{std::move(init.resourcecriteria)}
                                            {
 
                                            }

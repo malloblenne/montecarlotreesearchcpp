@@ -10,4 +10,4 @@ add_executable(tests src/montecarlotreesearch_test.cpp)
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 
 
-#catch_discover_tests(tests)
+catch_discover_tests(tests)
