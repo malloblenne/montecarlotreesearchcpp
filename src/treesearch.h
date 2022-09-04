@@ -9,7 +9,9 @@ namespace mctsearch
     class TreeSearch
     {
         public:
-          virtual void init(std::shared_ptr<mctsearch::GameState> state) = 0;
-          virtual std::unique_ptr<mctsearch::Action> search(std::shared_ptr<GameState> state) = 0;
+          virtual ~TreeSearch() = default;
+          
+          virtual void init() = 0;
+          virtual std::unique_ptr<mctsearch::Action> search(const GameState& state) = 0;
     };
 }
