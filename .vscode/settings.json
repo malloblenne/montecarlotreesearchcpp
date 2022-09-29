@@ -1,4 +1,8 @@
 {
+
+    "C_Cpp.intelliSenseEngine": "Default",
+    "C_Cpp.autocomplete": "Default",
+    "C_Cpp.errorSquiggles": "Enabled",
     "files.associations": {
         "array": "cpp",
         "atomic": "cpp",
