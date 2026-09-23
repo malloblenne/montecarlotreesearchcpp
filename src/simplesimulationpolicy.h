@@ -11,6 +11,7 @@ namespace mctsearch
         SimpleSimulationPolicy();
 
         WinningState simulate(const GameState* state) override;
+        WinningState simulate(const GameState* state, int player) override;
 
         private:
         int get_randomly_actionidx(int number_of_possible_actions);

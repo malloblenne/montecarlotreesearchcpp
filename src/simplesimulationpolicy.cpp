@@ -7,7 +7,11 @@ SimpleSimulationPolicy::SimpleSimulationPolicy():engine{r()}
 
 WinningState SimpleSimulationPolicy::simulate(const GameState* state)
 {
-    const auto owner{state->get_owner()};
+  return simulate(state, state->get_owner());
+}
+
+WinningState SimpleSimulationPolicy::simulate(const GameState* state, int player)
+{
 
     auto new_state{state->clone()};
     while (!new_state->is_terminal())
@@ -16,7 +20,7 @@ WinningState SimpleSimulationPolicy::simulate(const GameState* state)
       new_state->apply_nth_move(actionidx);
     }
 
-    return new_state->score(owner);
+    return new_state->score(player);
 }
 
 

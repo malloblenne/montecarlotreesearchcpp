@@ -9,5 +9,10 @@ namespace mctsearch
         virtual ~SimulationPolicy() = default;
 
         virtual WinningState simulate(const GameState* state) = 0;
+
+        virtual WinningState simulate(const GameState* state, int player)
+        {
+            return simulate(state);
+        }
     };
 }

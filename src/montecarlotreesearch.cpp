@@ -46,13 +46,14 @@ void MonteCarloTreeSearch::log_tree(const TreeSearchNode* node, int depth) const
 
 std::unique_ptr<Action> MonteCarloTreeSearch::search(const GameState& state)
 {
+    const auto player{state.get_owner()};
     root = std::make_shared<TreeSearchNode>(state.clone(), statistics->clone(), nullptr);
     auto new_node{root.get()};
 
     while(!resourcecriteria->expired())
     {
         new_node = selection->select_new(root.get());
-        const auto reward = simulation->simulate(new_node->game_state());
+        const auto reward = simulation->simulate(new_node->game_state(), player);
         backup->update(new_node, reward);
     }
 
