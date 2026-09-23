@@ -16,7 +16,7 @@ namespace mctsearch
         WIN = 1
     };
     
-    double winningstate_to_double(WinningState ws)
+    inline double winningstate_to_double(WinningState ws)
     {
         switch(ws)
         {

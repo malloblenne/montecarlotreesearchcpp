@@ -14,7 +14,7 @@ TimeCriteria::TimeCriteria(std::chrono::duration<int> duration): duration{durati
 
 std::string TimeCriteria::to_string() const
 {
-    return expired() ? "Time expired" : "Time still available";
+    return _expired() ? "Time expired" : "Time still available";
 }
 
 void TimeCriteria::init()
@@ -22,7 +22,12 @@ void TimeCriteria::init()
     start = std::chrono::steady_clock::now();
 }
 
-bool TimeCriteria::expired() const
+bool TimeCriteria::expired()
+{
+    return _expired();
+}
+
+bool TimeCriteria::_expired() const
 {
     return (std::chrono::steady_clock::now() - start) > duration;
 }

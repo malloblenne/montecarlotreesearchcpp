@@ -16,9 +16,12 @@ namespace mctsearch
 
         std::string to_string() const override;
         void init() override;
-        bool expired() const override;
+        bool expired() override;
 
         private:
+        
+        bool _expired() const;
+
         std::chrono::duration<int> duration;
         std::chrono::steady_clock::time_point start;
     };

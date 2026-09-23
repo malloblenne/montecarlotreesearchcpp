@@ -1,9 +1,6 @@
 #include "montecarlotreesearch.h"
-#include <thread>
-#include <chrono>
- 
+
 using namespace mctsearch;
-using namespace std::chrono_literals;
 
 
 MonteCarloTreeSearch::MonteCarloTreeSearch(MonteCarloTreeSearch::MonteCarloTreeSearchInitialization init):
@@ -30,12 +27,10 @@ std::unique_ptr<Action> MonteCarloTreeSearch::search(const GameState& state)
 
     while(!resourcecriteria->expired())
     {
-        // just for quickly test
-        std::this_thread::sleep_for(2000ms);
-        new_node = selection->select_new(new_node);
+        new_node = selection->select_new(root.get());
         const auto reward = simulation->simulate(new_node->game_state());
         backup->update(new_node, reward);
     }
 
-    return bestchild->choose_action(new_node);
+    return bestchild->choose_action(root.get());
 }

@@ -5,8 +5,10 @@ add_library(MonteCarloTreeSearchCPP
             simplesimulationpolicy.cpp
             simplestatisticsnode.cpp
             timecriteria.cpp
+            iterationcriteria.cpp
             treesearchnode.cpp
             montecarlotreesearch.cpp
+            montecarlotreesearchfactory.cpp
             upperconfidenceboundbestchild.cpp)
 
 # state that anybody linking to us needs to include the current source dir
@@ -23,7 +25,9 @@ install(FILES action.h
               expansionpolicy.h
               gamestate.h
               montecarlotreesearch.h
+              montecarlotreesearchfactory.h
               resourcecriteria.h
+              iterationcriteria.h
               selectionpolicy.h
               simplebackpropagationpolicy.h
               simpleexpansionpolicy.h

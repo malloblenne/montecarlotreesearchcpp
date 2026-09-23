@@ -9,7 +9,7 @@ state{std::move(state)},
 statisticsnode{std::move(stats)},
 parent{parent}
 {
-    children.resize(state->number_moves());
+    children.resize(this->state->number_moves());
 }
 
 TreeSearchNode* TreeSearchNode::get_parent() const

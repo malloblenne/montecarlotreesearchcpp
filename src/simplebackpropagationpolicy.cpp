@@ -8,7 +8,7 @@ void SimpleBackPropagationPolicy::update(TreeSearchNode* node, WinningState rewa
 {
     auto current_node{node};
 
-    while (node != nullptr)
+    while (current_node != nullptr)
     {
         current_node->update_statistics(reward);
         current_node = current_node->get_parent();
