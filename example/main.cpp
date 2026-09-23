@@ -11,6 +11,7 @@ void play_game(GameState& game, MonteCarloTreeSearch& mcts, const std::string& n
     while (!game.is_terminal())
     {
         mcts.init();
+        mcts.set_diagnostics_enabled(true);
         std::cout /*<< "\033[2J\033[H" */<< game.to_string() << std::flush;
         auto action = mcts.search(game);
         std::cout << "Action will be: " << action->to_string() << std::endl;

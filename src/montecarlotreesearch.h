@@ -29,7 +29,10 @@ namespace mctsearch
             MonteCarloTreeSearch(MonteCarloTreeSearchInitialization init);
             void init() override;
             std::unique_ptr<Action> search(const GameState& state) override;
+            void set_diagnostics_enabled(bool enabled);
         private:
+            void log_tree(const TreeSearchNode* node, int depth) const;
+
             std::unique_ptr<SelectionPolicy> selection;
             std::unique_ptr<ExpansionPolicy> expansion;
             std::unique_ptr<BackPropagationPolicy> backup;
@@ -39,5 +42,6 @@ namespace mctsearch
             std::unique_ptr<StatisticsNode> statistics;
             
             std::shared_ptr<TreeSearchNode> root;
+            bool diagnostics_enabled = false;
     };
 }
