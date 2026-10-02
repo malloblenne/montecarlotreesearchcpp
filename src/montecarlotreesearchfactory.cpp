@@ -14,11 +14,10 @@ using namespace std::chrono_literals;
 
 namespace mctsearch
 {
-    std::unique_ptr<MonteCarloTreeSearch> MonteCarloTreeSearchFactory::make_SimpleMonteCarloTreeSearch()
+    std::unique_ptr<MonteCarloTreeSearch> MonteCarloTreeSearchFactory::make_SimpleMonteCarloTreeSearch(int max_iterations)
     {
         const double weight = 0.5;
         //const std::chrono::milliseconds max_allowed_time = 2000ms;
-        const int max_iterations = 10000;
 
         MonteCarloTreeSearch::MonteCarloTreeSearchInitialization init{
                 .selection{make_unique<SimpleSelectionPolicy>(make_unique<SimpleExpansionPolicy>(make_unique<SimpleStatisticsNode>()),make_unique<UpperConfidenceBoundBestChild>(weight))},

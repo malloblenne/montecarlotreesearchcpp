@@ -7,6 +7,6 @@ namespace mctsearch
     class MonteCarloTreeSearchFactory
     {
         public:
-        static std::unique_ptr<MonteCarloTreeSearch> make_SimpleMonteCarloTreeSearch();
+        static std::unique_ptr<MonteCarloTreeSearch> make_SimpleMonteCarloTreeSearch(int max_iterations);
     };
 }
