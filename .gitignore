@@ -44,3 +44,14 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
+
+/build/
+/Main
+/example/main
+/test/tests
+*DartConfiguration.tcl
+tests_include-*.cmake
+tests_tests-*.cmake
+*.gcda
+*.gcno
+*.gcov
