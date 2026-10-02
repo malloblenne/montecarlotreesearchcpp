@@ -56,3 +56,51 @@ and Hex, and 100 for Circle of Life.
 - `main.cpp`: root executable, linked with the games library.
 - `example/`: AI-versus-AI example, also linked with the same games library.
 - `test/`: library tests.
+
+## Tests
+
+Tests build by default using the bundled Catch2 header; no package download is
+needed. Run them with CTest, which prints failure output:
+
+```bash
+./build.sh -DCMAKE_BUILD_TYPE=Debug
+cd build
+ctest --output-on-failure
+```
+
+The suite checks search-library statistics, iteration reset, tree expansion,
+backpropagation, simulation, UCB selection, and repeated factory searches.
+It also checks all three games' coordinate mappings and the CLI. Search tests
+use a deterministic toy game rather than asserting random AI choices.
+To build without tests, pass `-DBUILD_TESTING=OFF` to `build.sh`.
+
+## Coverage
+
+Coverage is opt-in and requires GCC and its matching `gcov`. Start with a fresh
+`build/` directory to avoid mixing existing coverage counters or build options:
+preserve or remove previous build output before running this sequence.
+
+```bash
+./build.sh -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DENABLE_COVERAGE=ON
+cd build
+ctest --output-on-failure
+ctest -T Coverage
+```
+
+The last command invokes **gcov**, displays line-coverage totals, and writes
+CTest coverage XML and annotated output under `Testing/`. Coverage excludes
+games and test code to focus on the `src` library. Normal builds have no
+instrumentation (`-DENABLE_COVERAGE=OFF`).
+
+For HTML and standard Cobertura XML reports, install `gcovr` and run from the
+repository root after the instrumented tests:
+
+```bash
+gcovr --root . --filter 'src/' --object-directory build --txt
+gcovr --root . --filter 'src/' --object-directory build --xml-pretty -o build/coverage.xml
+gcovr --root . --filter 'src/' --object-directory build --html-details -o build/coverage.html
+```
+
+gcovr formats gcov data, including branch coverage. No minimum coverage threshold
+is enforced; the report exposes gaps such as time-based criteria and diagnostic
+logging for future tests.

@@ -11,6 +11,11 @@ add_library(MonteCarloTreeSearchCPP
             montecarlotreesearchfactory.cpp
             upperconfidenceboundbestchild.cpp)
 
+if(ENABLE_COVERAGE)
+    target_compile_options(MonteCarloTreeSearchCPP PRIVATE --coverage -O0 -g)
+    target_link_libraries(MonteCarloTreeSearchCPP PUBLIC --coverage)
+endif()
+
 # state that anybody linking to us needs to include the current source dir
 # to find the header files, while we don't.
 target_include_directories(MonteCarloTreeSearchCPP
