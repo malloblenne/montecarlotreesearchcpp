@@ -58,3 +58,5 @@ tests_tests-*.cmake
 *.gcov
 __pycache__/
 *.pyc
+/web/node_modules/
+/web/test-results/
