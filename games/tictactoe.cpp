@@ -32,9 +32,10 @@ TicTacToe& TicTacToe::operator=(TicTacToe const &origin)
 
 std::string TicTacToe::to_string() const
 {
-    std::string result;
+    std::string result = "    0 1 2\n";
     for (int r = 0; r < board.size(); r++)
     {
+        result += std::to_string(r) + " : ";
         for (int c = 0; c <  board[0].size(); c++)
         {
             result += std::to_string(board[r][c]) + " ";
@@ -59,6 +60,30 @@ int TicTacToe::number_moves()
         }
     }
     return number_zeros;
+}
+
+std::optional<int> TicTacToe::move_index(int row, int column) const
+{
+    if (row < 0 || row >= 3 || column < 0 || column >= 3)
+    {
+        return std::nullopt;
+    }
+    int index = 0;
+    for (int board_row = 0; board_row < 3; ++board_row)
+    {
+        for (int board_column = 0; board_column < 3; ++board_column)
+        {
+            if (board[board_row][board_column] == PLAYER_NOPLAYER)
+            {
+                if (board_row == row && board_column == column)
+                {
+                    return index;
+                }
+                ++index;
+            }
+        }
+    }
+    return std::nullopt;
 }
 
 void TicTacToe::apply_nth_move(int n)

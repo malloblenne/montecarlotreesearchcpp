@@ -25,8 +25,28 @@ Run the root program or the AI-versus-AI example from the repository root:
 ./build/example/main
 ```
 
-The example currently plays Circle of Life. The root program is updated in the
-following CLI task. Generated binaries and CMake files stay in `build/`.
+The example currently plays Circle of Life with two AI players. Generated
+binaries and CMake files stay in `build/`.
+
+## Play Against the AI
+
+Run `./build/Main` and choose `1` (TicTacToe), `2` (Hex), or `3` (Circle of Life).
+You play first as X (`1`); the AI plays O (`2`); empty cells are `0`.
+
+- TicTacToe: enter `row col`, both zero-based from `0` through `2`.
+- Hex: enter `row col`, both zero-based from `0` through `10`. X connects the
+	top and bottom edges; O connects the left and right edges.
+- Circle of Life: enter axial `q r`, both from `-4` through `4`, with `q+r`
+	also in that range. Rows are labeled `r`, and each row shows its `q` range.
+	Occupied cells and placements that create groups larger than four are illegal.
+
+For example, enter `1 2` in TicTacToe or `-1 2` in Circle of Life. The program
+prints the expected format before play and shows at most ten legal actions per
+human turn. Additional legal coordinates remain selectable even when not shown.
+The `n:` values in previews are internal legal-action indices, not keyboard input.
+Invalid input is rejected without consuming a turn. Enter `q` or send EOF to
+exit from the menu or a human turn. AI budgets are 1,000 iterations for TicTacToe
+and Hex, and 100 for Circle of Life.
 
 ## Layout
 

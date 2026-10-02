@@ -2,6 +2,7 @@
 
 #include "gamestate.h"
 #include <array>
+#include <optional>
 
 
 namespace mctsearch
@@ -25,6 +26,8 @@ namespace mctsearch
         std::string to_string() const;
 
         int number_moves();
+
+        std::optional<int> move_index(int row, int column) const;
 
     	void apply_nth_move(int n);
 	

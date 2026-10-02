@@ -56,6 +56,8 @@ std::string CircleOfLife::to_string() const
     {
         const int first_q = std::max(-BOARD_RADIUS, -r - BOARD_RADIUS);
         const int last_q = std::min(BOARD_RADIUS, -r + BOARD_RADIUS);
+         result << "r=" << std::setw(2) << r << " q=" << std::setw(2) << first_q
+             << ".." << last_q << ": ";
         result << std::string(static_cast<std::size_t>(std::abs(r)), ' ');
         for (int q = first_q; q <= last_q; q++)
         {
@@ -74,6 +76,17 @@ std::string CircleOfLife::to_string() const
 int CircleOfLife::number_moves()
 {
     return static_cast<int>(legal_moves().size());
+}
+
+std::optional<int> CircleOfLife::move_index(int q, int r) const
+{
+    const auto moves = legal_moves();
+    const auto found = std::find(moves.begin(), moves.end(), Cell{q, r});
+    if (found == moves.end())
+    {
+        return std::nullopt;
+    }
+    return static_cast<int>(found - moves.begin());
 }
 
 void CircleOfLife::apply_nth_move(int n)

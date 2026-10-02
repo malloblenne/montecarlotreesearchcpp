@@ -3,6 +3,7 @@
 #include "gamestate.h"
 
 #include <array>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -26,6 +27,7 @@ namespace mctsearch
 
         std::string to_string() const;
         int number_moves();
+        std::optional<int> move_index(int q, int r) const;
         void apply_nth_move(int n);
         int get_owner() const;
         bool is_terminal() const;

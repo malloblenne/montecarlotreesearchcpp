@@ -2,6 +2,7 @@
 #include "../src/action.h"
 
 #include <algorithm>
+#include <iomanip>
 #include <queue>
 #include <sstream>
 #include <stdexcept>
@@ -26,8 +27,15 @@ Hex& Hex::operator=(Hex const& origin)
 std::string Hex::to_string() const
 {
     std::ostringstream result;
+    result << "col: ";
+    for (int column = 0; column < BOARD_SIZE; ++column)
+    {
+        result << std::left << std::setw(4) << column;
+    }
+    result << '\n' << std::right;
     for (int row = 0; row < BOARD_SIZE; row++)
     {
+        result << std::setw(2) << row << " : ";
         result << std::string(static_cast<std::size_t>(row), ' ');
         for (int column = 0; column < BOARD_SIZE; column++)
         {
@@ -40,7 +48,7 @@ std::string Hex::to_string() const
         result << '\n';
         if (row + 1 < BOARD_SIZE)
         {
-            result << std::string(static_cast<std::size_t>(row + 1), ' ');
+            result << "     " << std::string(static_cast<std::size_t>(row + 1), ' ');
             for (int column = 0; column < BOARD_SIZE; column++)
             {
                 result << "\\ /";
@@ -63,6 +71,30 @@ int Hex::number_moves()
         available += static_cast<int>(std::count(row.begin(), row.end(), PLAYER_NOPLAYER));
     }
     return available;
+}
+
+std::optional<int> Hex::move_index(int row, int column) const
+{
+    if (row < 0 || row >= BOARD_SIZE || column < 0 || column >= BOARD_SIZE)
+    {
+        return std::nullopt;
+    }
+    int index = 0;
+    for (int board_row = 0; board_row < BOARD_SIZE; ++board_row)
+    {
+        for (int board_column = 0; board_column < BOARD_SIZE; ++board_column)
+        {
+            if (board[board_row][board_column] == PLAYER_NOPLAYER)
+            {
+                if (board_row == row && board_column == column)
+                {
+                    return index;
+                }
+                ++index;
+            }
+        }
+    }
+    return std::nullopt;
 }
 
 void Hex::apply_nth_move(int n)
