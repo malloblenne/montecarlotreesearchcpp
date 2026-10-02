@@ -1,6 +1,38 @@
 # montecarlotreesearchcpp
 C++ Library for Monte Carlo Tree Search for (Abstract) Combinatorial Games
 
+## Browser Games
+
+Play at [MCTS Game Room](https://malloblenne.github.io/montecarlotreesearchcpp/).
+The browser runs the root `main.cpp` and the same games/search libraries compiled
+to WebAssembly, not a JavaScript reimplementation. Select a game, type coordinates,
+and press Enter or **Play move**. **Restart game** starts a fresh match; switching
+games cancels the previous match. Input formats and legal actions come from the
+same C++ CLI. The AI runs in a Web Worker so the page remains responsive.
+
+### Build the Website
+
+Install and activate [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html)
+3.1.74 (the version pinned in CI), then build through CMake:
+
+```bash
+emcmake cmake -S . -B build-web -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
+cmake --build build-web --parallel 4
+python3 -m http.server 8765 --directory build-web/site
+```
+
+Open `http://localhost:8765`. CMake emits `Main.js`, `Main.wasm`, and all frontend
+assets into `build-web/site/`. Serve the files over HTTP; opening `index.html`
+directly with `file://` will not load the worker and Wasm correctly. All assets
+use relative paths, including on a repository-specific Pages URL. No external
+fonts, scripts, server game logic, or cross-origin isolation headers are required.
+Native CMake builds keep their existing CLI, examples, tests, and coverage.
+
+Asyncify suspends C++ only while awaiting input, and C++ exception handling remains
+enabled. The worker is terminated on restart/switch, so even an in-progress AI
+search can be canceled. Initial download and larger-game AI turns can take longer
+on low-powered devices.
+
 ## Build
 
 On Linux, install Bash, CMake 3.10 or newer, GNU Make, and a C++17 compiler
@@ -142,3 +174,43 @@ On recent CMake versions (3.21 or newer), local JUnit output is available with
 Older CMake versions can produce Catch2 JUnit output directly with
 `./build/test/tests --reporter junit --out build/catch2-results.xml` from the root;
 that report does not include the separate CLI smoke check.
+
+## Browser Tests
+
+Emscripten builds omit the native example and Catch2 targets; native CTest
+behavior is unchanged. Browser regressions use Node.js 22 and Playwright:
+
+```bash
+cd web
+npm ci
+npx playwright install --with-deps chromium
+npm test
+```
+
+Build the Wasm site first. Tests start their own HTTP server on port 8766 and
+load the site under `/site/` to verify subpath asset loading. They exercise every
+game's actual Wasm AI, invalid input, the ten-action preview limit, quitting,
+restart, terminal results, worker cancellation, and mobile layout. JUnit XML
+and failure screenshots/traces are written under `web/test-results/`.
+Current Playwright browsers require a supported OS, such as Ubuntu 24.04;
+the project's Debian 11 container can still build Wasm and serve the site.
+
+## GitHub Pages
+
+The **WebAssembly and GitHub Pages** workflow builds and tests on pushes and
+pull requests. Successful builds publish from the default branch, an explicitly
+selected `PAGES_PUBLISH_BRANCH` repository variable, or manual workflow dispatch.
+Pull requests never deploy. Each run uploads browser test reports and the
+self-contained Pages site artifact; deployment uses GitHub's Pages Actions.
+
+In repository **Settings > Pages**, set **Source** to **GitHub Actions**.
+The `github-pages` environment must permit the publishing branch. Push the
+changes to the default branch, or set **Settings > Secrets and variables >
+Actions > Variables > PAGES_PUBLISH_BRANCH** to a branch intended for publication.
+Leave the variable unset for default-branch-only publishing. The deployment job
+provides the live URL after it succeeds:
+
+<https://malloblenne.github.io/montecarlotreesearchcpp/>
+
+The native release and gcov workflow remains separate. Generated Wasm files are
+uploaded as deployment artifacts, not committed into the source tree.
