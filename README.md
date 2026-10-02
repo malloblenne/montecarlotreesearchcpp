@@ -103,4 +103,42 @@ gcovr --root . --filter 'src/' --object-directory build --html-details -o build/
 
 gcovr formats gcov data, including branch coverage. No minimum coverage threshold
 is enforced; the report exposes gaps such as time-based criteria and diagnostic
-logging for future tests.
+logging for future tests. gcovr also includes instrumented files with no execution
+data, whereas CTest's native coverage may omit them. Its totals can therefore
+be lower even though both reports are limited to `src/`.
+
+## GitHub Actions
+
+The **Build, Test, and Coverage** workflow runs on pushes, pull requests, and
+manual dispatch, with two independent Linux jobs:
+
+- **Linux Release** builds and tests the full project, then uploads the
+	`mcts-linux-x86_64` binary artifact and `release-test-results` (JUnit XML and
+	CTest logs).
+- **Linux GCC Coverage** runs instrumented tests, prints native gcov output,
+	and uploads `test-and-coverage-reports`: JUnit XML, Cobertura XML, coverage
+	text, HTML details, and CTest logs. The job summary shows passed/failed checks
+	and `src/` line/branch coverage. Available reports are retained on test failure.
+
+Download artifacts from the workflow run's **Artifacts** section. Extract the
+archive inside the binary artifact and run:
+
+```bash
+tar -xzf mcts-linux-x86_64.tar.gz
+./Main
+./example/main
+```
+
+Binaries target x86-64 Ubuntu 24.04 and depend on compatible system C/C++
+runtime libraries; they are not fully static or cross-platform binaries.
+Static libraries are in the archive's `src/` and `games/` directories; use the
+repository headers when linking them. No GitHub release publication or external
+coverage service is configured. Open `coverage.html` alongside its companion
+HTML files to inspect per-file coverage. JUnit counts in the GitHub summary
+represent the three CTest checks, not individual Catch2 assertions.
+
+On recent CMake versions (3.21 or newer), local JUnit output is available with
+`ctest --output-on-failure --output-junit test-results.xml` inside `build/`.
+Older CMake versions can produce Catch2 JUnit output directly with
+`./build/test/tests --reporter junit --out build/catch2-results.xml` from the root;
+that report does not include the separate CLI smoke check.

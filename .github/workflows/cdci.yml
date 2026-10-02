@@ -1,11 +1,85 @@
-name: CD-CI
-on: [push]
+name: Build, Test, and Coverage
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
-  compile:
-    name: Compile CPP
-    runs-on: ubuntu-latest
+  release:
+    name: Linux Release
+    runs-on: ubuntu-24.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: compile
-        run: g++ -g main.cpp -o main.out
+      - uses: actions/checkout@v4
+      - name: Build all targets
+        run: ./build.sh -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DENABLE_COVERAGE=OFF
+      - name: Test
+        working-directory: build
+        run: ctest --output-on-failure --output-junit test-results.xml
+      - name: Package binaries and static libraries
+        run: |
+          tar -czf build/mcts-linux-x86_64.tar.gz -C build \
+            Main example/main src/libMonteCarloTreeSearchCPP.a games/libGamesLibrary.a
+      - name: Test summary
+        if: always()
+        run: python3 .github/scripts/report_summary.py build/test-results.xml >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcts-linux-x86_64
+          path: build/mcts-linux-x86_64.tar.gz
+          if-no-files-found: ignore
+      - name: Upload test results and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-test-results
+          path: |
+            build/test-results.xml
+            build/Testing/Temporary/
+          if-no-files-found: ignore
+
+  coverage:
+    name: Linux GCC Coverage
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install report formatter
+        run: python -m pip install gcovr==8.4
+      - name: Instrument and build
+        id: build
+        run: ./build.sh -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DENABLE_COVERAGE=ON
+      - name: Test
+        working-directory: build
+        run: ctest --output-on-failure --output-junit test-results.xml
+      - name: Native gcov coverage
+        if: always() && steps.build.outcome == 'success'
+        working-directory: build
+        run: ctest -T Coverage
+      - name: Standard coverage reports
+        if: always() && steps.build.outcome == 'success'
+        run: |
+          gcovr --root . --filter 'src/' --object-directory build \
+            --txt build/coverage.txt \
+            --cobertura-pretty --cobertura build/coverage.xml \
+            --html-details build/coverage.html
+          cat build/coverage.txt
+      - name: Test and coverage summary
+        if: always()
+        run: python .github/scripts/report_summary.py build/test-results.xml build/coverage.xml >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-and-coverage-reports
+          path: |
+            build/test-results.xml
+            build/coverage*
+            build/Testing/
+          if-no-files-found: ignore
