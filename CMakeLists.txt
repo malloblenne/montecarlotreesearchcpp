@@ -7,11 +7,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(src)
-list(APPEND EXTRA_LIBS MonteCarloTreeSearchCPP)
+add_subdirectory(games)
 
 
 add_executable(Main main.cpp)
-target_link_libraries(Main PUBLIC ${EXTRA_LIBS})
+target_link_libraries(Main PRIVATE GamesLibrary)
 
 include(CTest)
 #enable_testing()

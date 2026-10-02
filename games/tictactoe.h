@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../src/gamestate.h"
+#include "gamestate.h"
 #include <array>
 
 

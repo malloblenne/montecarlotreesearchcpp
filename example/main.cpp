@@ -1,4 +1,4 @@
-#include <../src/montecarlotreesearchfactory.h>
+#include "montecarlotreesearchfactory.h"
 #include "circleoflife.h"
 #include "hex.h"
 #include "tictactoe.h"

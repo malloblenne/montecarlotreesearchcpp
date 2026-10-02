@@ -27,3 +27,12 @@ Run the root program or the AI-versus-AI example from the repository root:
 
 The example currently plays Circle of Life. The root program is updated in the
 following CLI task. Generated binaries and CMake files stay in `build/`.
+
+## Layout
+
+- `src/`: the Monte Carlo tree search library (`MonteCarloTreeSearchCPP`).
+- `games/`: TicTacToe, Hex, and Circle of Life, compiled once into the
+	`GamesLibrary` static library (`build/games/libGamesLibrary.a`).
+- `main.cpp`: root executable, linked with the games library.
+- `example/`: AI-versus-AI example, also linked with the same games library.
+- `test/`: library tests.

@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_executable(main main.cpp tictactoe.cpp hex.cpp circleoflife.cpp)
+add_executable(main main.cpp)
 target_compile_features(main PRIVATE cxx_std_17)
 
-target_link_libraries(main PRIVATE MonteCarloTreeSearchCPP)
+target_link_libraries(main PRIVATE GamesLibrary)
 
