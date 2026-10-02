@@ -9,8 +9,43 @@
 #include <stdexcept>
 #include <string>
 
+#ifdef __EMSCRIPTEN__
+#include <cstdlib>
+#include <emscripten.h>
+
+EM_ASYNC_JS(char*, browser_read_line, (), {
+    const line = await new Promise(resolve => {
+        self.pendingInput = resolve;
+        self.postMessage({type: 'input-request'});
+    });
+    if (line === null) {
+        return 0;
+    }
+    const size = lengthBytesUTF8(line) + 1;
+    const pointer = _malloc(size);
+    stringToUTF8(line, pointer, size);
+    return pointer;
+});
+#endif
+
 namespace
 {
+bool read_line(std::string& line)
+{
+#ifdef __EMSCRIPTEN__
+    char* input = browser_read_line();
+    if (!input)
+    {
+        return false;
+    }
+    line = input;
+    std::free(input);
+    return true;
+#else
+    return static_cast<bool>(std::getline(std::cin, line));
+#endif
+}
+
 bool quit_requested(const std::string& line)
 {
     std::istringstream input(line);
@@ -54,7 +89,7 @@ void play_game(Game game, const std::string& name, const std::string& format, in
             {
                 std::cout << "Your move: " << std::flush;
                 std::string line;
-                if (!std::getline(std::cin, line) || quit_requested(line))
+                if (!read_line(line) || quit_requested(line))
                 {
                     std::cout << "\nGoodbye.\n";
                     return;
@@ -111,7 +146,7 @@ int main()
         {
             std::cout << "Game: " << std::flush;
             std::string line;
-            if (!std::getline(std::cin, line) || quit_requested(line))
+            if (!read_line(line) || quit_requested(line))
             {
                 std::cout << "\nGoodbye.\n";
                 return 0;
