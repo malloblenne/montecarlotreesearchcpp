@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f6f4">
+    <title>MCTS Game Room</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <header class="masthead">
+        <div class="identity"><span class="mark" aria-hidden="true">M</span><span>MCTS <strong>Game Room</strong></span></div>
+        <span class="runtime">C++ / WebAssembly</span>
+    </header>
+    <main>
+        <div class="session-heading">
+            <div><p class="eyebrow">Human vs. machine</p><h1 id="game-title">TicTacToe</h1></div>
+            <button id="restart" type="button">Restart game</button>
+        </div>
+        <nav class="game-picker" aria-label="Game selection">
+            <button type="button" data-game="1" aria-pressed="true">TicTacToe<span>01</span></button>
+            <button type="button" data-game="2" aria-pressed="false">Hex<span>02</span></button>
+            <button type="button" data-game="3" aria-pressed="false">Circle of Life<span>03</span></button>
+        </nav>
+        <section class="console" aria-label="Game console">
+            <div class="console-bar"><span>Match log</span><span id="status" role="status">Loading engine</span></div>
+            <div id="transcript" role="log" aria-label="Game output" aria-live="polite" aria-relevant="additions text" tabindex="0"></div>
+            <form id="move-form" autocomplete="off">
+                <label for="move" id="input-label">Coordinates</label>
+                <div class="input-row"><span class="prompt" aria-hidden="true">&gt;</span><input id="move" name="move" type="text" placeholder="row col" spellcheck="false" maxlength="100" disabled><button id="submit" type="submit" disabled>Play move</button></div>
+            </form>
+        </section>
+        <footer><span>You <b class="human">X / 1</b></span><span>AI <b class="ai">O / 2</b></span><span class="footer-right">Monte Carlo Tree Search</span></footer>
+    </main>
+</body>
+</html>

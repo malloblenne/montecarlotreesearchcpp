@@ -137,7 +137,7 @@ void play_game(Game game, const std::string& name, const std::string& format, in
 }
 }
 
-int main()
+int run_cli()
 {
     try
     {
@@ -184,4 +184,13 @@ int main()
         std::cerr << "Error: " << error.what() << '\n';
         return 1;
     }
+}
+
+int main()
+{
+    const int result = run_cli();
+#ifdef __EMSCRIPTEN__
+    EM_ASM({ self.postMessage({type: 'exit', code: $0}); }, result);
+#endif
+    return result;
 }

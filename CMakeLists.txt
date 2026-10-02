@@ -26,8 +26,25 @@ add_subdirectory(games)
 add_executable(Main main.cpp)
 target_link_libraries(Main PRIVATE GamesLibrary)
 
+if(EMSCRIPTEN)
+	target_compile_options(MonteCarloTreeSearchCPP PRIVATE -fexceptions)
+	target_compile_options(GamesLibrary PRIVATE -fexceptions)
+	target_compile_options(Main PRIVATE -fexceptions)
+	set_target_properties(Main PROPERTIES
+		SUFFIX ".js"
+		RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/site")
+	set_property(TARGET Main APPEND_STRING PROPERTY LINK_FLAGS
+		" -sASYNCIFY=1 -sASYNCIFY_STACK_SIZE=131072 -sALLOW_MEMORY_GROWTH=1 -sMODULARIZE=1 -sEXPORT_NAME=createMcts -sENVIRONMENT=worker -sEXIT_RUNTIME=1 -sDISABLE_EXCEPTION_CATCHING=0 -sEXPORTED_RUNTIME_METHODS=callMain")
+	file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/site")
+	foreach(asset index.html style.css app.js worker.js)
+		configure_file("web/${asset}" "site/${asset}" COPYONLY)
+	endforeach()
+endif()
+
 include(CTest)
-if(BUILD_TESTING)
+if(BUILD_TESTING AND NOT EMSCRIPTEN)
 	add_subdirectory(test)
 endif()
-add_subdirectory(example)
+if(NOT EMSCRIPTEN)
+	add_subdirectory(example)
+endif()
